@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { Button } from "@/components/ui/button";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
 const baseLink = "https://api.quotable.io/quotes/random";
 
@@ -57,19 +51,33 @@ function App() {
 
   console.log("quoteData: ", quoteData);
 
+  const {
+    author,
+    authorSlug,
+    content,
+    dateAdded,
+    dateModified,
+    length,
+    tags,
+    _id,
+  } = quoteData;
   return (
     <>
       <h1>Random quotes</h1>
       <Button onClick={handleFetch}>get a new quote</Button>
       <section>
-        <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger>Is it accessible?</AccordionTrigger>
-            <AccordionContent>
-              Yes. It adheres to the WAI-ARIA design pattern.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+        <h1 className="text-3xl">{content}</h1>
+        <h5>{author}</h5>
+        <h5>{authorSlug}</h5>
+        <header>
+          <p>{dateAdded}</p>
+          <p>{dateModified}</p>
+          <p>
+            {tags.map((tag) => (
+              <div>#{tag}</div>
+            ))}
+          </p>
+        </header>
       </section>
     </>
   );
