@@ -26,6 +26,7 @@ function App() {
     tags: [],
     _id: "",
   });
+  const [isFetching, setIsFetching] = useState<boolean>(true);
 
   useEffect(() => {
     handleFetch();
@@ -49,7 +50,7 @@ function App() {
       .catch((err) => console.log(err));
   };
 
-  console.log("quoteData: ", quoteData);
+  if (isFetching) return <h1>loading...</h1>;
 
   const {
     author,
@@ -62,24 +63,40 @@ function App() {
     _id,
   } = quoteData;
   return (
-    <>
-      <h1>Random quotes</h1>
-      <Button onClick={handleFetch}>get a new quote</Button>
-      <section>
-        <h1 className="text-3xl">{content}</h1>
-        <h5>{author}</h5>
-        <h5>{authorSlug}</h5>
-        <header>
-          <p>{dateAdded}</p>
-          <p>{dateModified}</p>
-          <p>
-            {tags.map((tag) => (
-              <div>#{tag}</div>
-            ))}
+    <section className="flex flex-col items-center justify-center p-3 h-[100vh]">
+      {/* <h1 className="text-foreground">Random quotes</h1> */}
+      <article className="flex flex-col items-center justify-center gap-2">
+        <blockquote className="text-2xl text-center">"{content}"</blockquote>
+        <aside>
+          <p className="text-sm">
+            - {author}
+            <span className="text-xs"> ({authorSlug})</span>
           </p>
+        </aside>
+        <div
+          className="flex flex-wrap items-center justify-center mt-3"
+          style={{
+            width: "100%",
+            maxWidth: "400px",
+          }}
+        >
+          {tags.map((tag) => (
+            <div className="text-sm border border-gray-300 p-1 rounded">
+              #{tag}
+            </div>
+          ))}
+        </div>
+
+        <header className="mt-5 flex gap-2 flex-wrap">
+          <p className="text-xs">Added on {dateAdded}</p>
+          <p className="text-xs">Modified {dateModified}</p>
         </header>
-      </section>
-    </>
+      </article>
+
+      <Button className="mt-3" onClick={handleFetch}>
+        Get a new quote
+      </Button>
+    </section>
   );
 }
 
