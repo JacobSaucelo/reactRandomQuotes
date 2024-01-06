@@ -33,6 +33,7 @@ function App() {
   }, []);
 
   const handleFetch = async () => {
+    setIsFetching(true);
     await fetch(baseLink, { method: "GET" })
       .then((res) => res.json())
       .then((data: QuoteDataType[]) => {
@@ -46,22 +47,23 @@ function App() {
           tags: data[0].tags,
           _id: data[0]._id,
         });
+        setIsFetching(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setIsFetching(true);
+      });
   };
 
-  if (isFetching) return <h1>loading...</h1>;
+  if (isFetching)
+    return (
+      <section className="flex items-center justify-center border h-[100vh] ">
+        <h1 className="text-xl">Loading quote...</h1>
+      </section>
+    );
 
-  const {
-    author,
-    authorSlug,
-    content,
-    dateAdded,
-    dateModified,
-    length,
-    tags,
-    _id,
-  } = quoteData;
+  const { author, authorSlug, content, dateAdded, dateModified, tags } =
+    quoteData;
   return (
     <section className="flex flex-col items-center justify-center p-3 h-[100vh]">
       {/* <h1 className="text-foreground">Random quotes</h1> */}
